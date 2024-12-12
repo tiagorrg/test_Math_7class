@@ -18,7 +18,7 @@ const questions = [
             'x = 3',
             'x = 6',
             'x = 9',
-            'x = -3'
+            'x = -6'
         ],
     },
     {
@@ -34,12 +34,22 @@ const questions = [
     },
     {
         type: 'select',
+        textQuestion: 'Сосал?',
+        trueAnswer: 'Да',
+        allAnswers: [
+            'Да',
+            'Нет',
+            'Вчера'
+        ],
+    },
+    {
+        type: 'select',
         textQuestion: 'Какой из следующих углов является тупым?',
-        trueAnswer: '270 градусов',
+        trueAnswer: '145 градусов',
         allAnswers: [
             '90 градусов',
             '180 градусов',
-            '270 градусов',
+            '145 градусов',
             '45 градусов'
         ],
     },
@@ -56,7 +66,7 @@ const questions = [
     {
         type: 'input',
         textQuestion: 'Если 5x - 3 = 17, то чему равно значение выражения 3x + 1?',
-        trueAnswer: '10'
+        trueAnswer: '13'
     }
 ]
 
@@ -216,6 +226,8 @@ const createButtonNext = () => {
 
 
     createButton.addEventListener('click', () => {
+        buttonsNavigation.innerHTML = ''
+
         const trueAnswer = questions[sequenceNumber].trueAnswer
 
         console.log('нажал', 'trueAnswer', trueAnswer)
