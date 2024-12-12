@@ -34,16 +34,6 @@ const questions = [
     },
     {
         type: 'select',
-        textQuestion: 'Сосал?',
-        trueAnswer: 'Да',
-        allAnswers: [
-            'Да',
-            'Нет',
-            'Вчера'
-        ],
-    },
-    {
-        type: 'select',
         textQuestion: 'Какой из следующих углов является тупым?',
         trueAnswer: '145 градусов',
         allAnswers: [
