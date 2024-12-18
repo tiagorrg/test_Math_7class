@@ -85,7 +85,7 @@ const createInfoEndBlock = () => {
 }
 
 const createQuestionSelect = () => {
-    if (questions.length < sequenceNumber){
+    if (questions.length <= sequenceNumber){
         return
     }
 
@@ -98,13 +98,13 @@ const createQuestionSelect = () => {
     const containerQuestions = document.getElementsByClassName('question')[0]
     containerQuestions.innerHTML = ''
 
+    countQuestion(containerQuestions)
+
     const createTextQuestion = document.createElement('div')
     createTextQuestion.classList.add('text-question')
     createTextQuestion.innerHTML = textQuestion
 
     containerQuestions.appendChild(createTextQuestion)
-
-    console.log('создание блоков ответа')
 
     for (let i = 0; i < allAnswers.length; i++){
         const createAnswerBlock = document.createElement('div')
@@ -128,7 +128,7 @@ const createQuestionSelect = () => {
 }
 
 const createQuestionInput = () => {
-    if (questions.length < sequenceNumber){
+    if (questions.length <= sequenceNumber){
         return
     }
 
@@ -137,9 +137,11 @@ const createQuestionInput = () => {
     if (type !== 'input'){
         return
     }
-    console.log(113, trueAnswer)
+
     const containerQuestions = document.getElementsByClassName('question')[0]
     containerQuestions.innerHTML = ''
+
+    countQuestion(containerQuestions)
 
     const createTextQuestion = document.createElement('div')
     createTextQuestion.classList.add('text-question')
@@ -147,21 +149,22 @@ const createQuestionInput = () => {
 
     containerQuestions.appendChild(createTextQuestion)
 
-    console.log('создание блоков ответа')
-
     const createUserInput = document.createElement('input')
     createUserInput.classList.add('js-input')
     createUserInput.placeholder = 'Ответ'
+    createUserInput.type = 'number'
+
+    createUserInput.addEventListener('input', function(e) {
+        e.target.value = e.target.value.replace(/\D+/g, "")
+    })
 
     createUserInput.addEventListener('change', (e) => {
 
         currentAnswer = e.target.value
-        console.log(currentAnswer)
         
     })
 
     containerQuestions.appendChild(createUserInput)
-    console.log(141, trueAnswer)
     createButtonNext(trueAnswer)
 }
 
@@ -171,11 +174,10 @@ const checkSelectedAnswer = (trueAnswer) => {
     }
 
     if (document.getElementsByClassName('js-input')[0]){
-        console.log('js-input есть', currentAnswer, trueAnswer)
         if (currentAnswer === trueAnswer){
             userAnswer[sequenceNumber] = true
         } else userAnswer[sequenceNumber] = false
-        console.log(userAnswer)
+
         return
     }
 
@@ -184,26 +186,27 @@ const checkSelectedAnswer = (trueAnswer) => {
         return
     }
 
-    console.log('js-input нет')
-
     const userCurrentAnswerText = document.getElementsByClassName('select')[0].innerHTML
     const userCurrentAnswer = document.getElementsByClassName('select')[0]
 
-    console.log('Текст ответа', userCurrentAnswerText)
-    console.log('trueAnswer', trueAnswer)
     if (userCurrentAnswerText == trueAnswer){
         userAnswer[sequenceNumber] = true
     } else userAnswer[sequenceNumber] = false
 
-    console.log(userAnswer)
-
     const answer = userAnswer[sequenceNumber]
-
-    console.log('Состояние ответа', answer)
 
     if (!answer){
         userCurrentAnswer.classList.add('incorrect')
     }
+}
+
+const countQuestion = (containerQuestions) => {
+    const createCountQuestion = document.createElement('div')
+
+    createCountQuestion.innerHTML = `Вопрос ${sequenceNumber + 1}/${questions.length}`
+    createCountQuestion.classList.add('counter')
+
+    containerQuestions.appendChild(createCountQuestion)
 }
 
 const createButtonNext = () => {
@@ -214,18 +217,16 @@ const createButtonNext = () => {
     createButton.classList.add('button')
     createButton.innerHTML = 'Следующий вопрос'
 
+    document.getElementsByClassName('navigation')[0].style="display: block;"
 
     createButton.addEventListener('click', () => {
         buttonsNavigation.innerHTML = ''
 
         const trueAnswer = questions[sequenceNumber].trueAnswer
-
-        console.log('нажал', 'trueAnswer', trueAnswer)
         
         checkSelectedAnswer(trueAnswer)
 
         setTimeout(() => {
-            console.log('переход к новому вопросу')
 
             sequenceNumber += 1
             
@@ -234,8 +235,7 @@ const createButtonNext = () => {
                 return
             }
 
-            createQuestionSelect()
-            createQuestionInput()
+            renderQuestion()
         }, 500)
     })
 
@@ -250,6 +250,8 @@ const createStartRestartWindow = () => {
     const buttonCreate = document.createElement('div')
 
     buttonCreate.classList.add('button')
+
+    document.getElementsByClassName('navigation')[0].style="display: none;"
 
     if (sequenceNumber === 0){
         buttonCreate.innerHTML = 'Начать тест'
@@ -268,10 +270,20 @@ const createStartRestartWindow = () => {
 
     buttonCreate.addEventListener('click', () => {
         buttonWrapper.innerHTML = ''
-        createQuestionSelect()
+        renderQuestion()
     })
 
     buttonWrapper.appendChild(buttonCreate)
+}
+
+const renderQuestion = () => {
+    const currentQuestion = questions[sequenceNumber]
+    
+    if (currentQuestion.type === 'select') {
+        createQuestionSelect()
+    } else if (currentQuestion.type === 'input') {
+        createQuestionInput()
+    }
 }
 
 createStartRestartWindow()

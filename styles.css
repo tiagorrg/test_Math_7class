@@ -5,6 +5,10 @@ body {
     padding-top: 15%;
 }
 
+h1 {
+    margin: 0;
+}
+
 .container {
     display: flex;
     align-items: center;
@@ -22,6 +26,7 @@ body {
     align-items: center;
     background-color: #ffffff;
     padding: 30px;
+    position: relative;
 }
 
 .container .question .text-question {
@@ -29,16 +34,37 @@ body {
 
 }
 
+.container .question .counter{
+    position: absolute;
+    top: 5px;
+    right: 5px;
+}
+
+.container .question .answer {
+    cursor: pointer;
+    background-color: aliceblue;
+    width: 100%;
+    border-radius: 18px;
+    text-align: center;
+}
+
+.container .question .answer:hover {
+    color: rgb(88, 88, 222);
+}
+
 .container .question .answer.select {
-    color: rgb(73, 204, 145);
+    background-color: rgb(73, 204, 145);
+    color: black;
 }
 
 .container .question .answer.incorrect {
-    color: rgb(204, 73, 73);
+    color: black;
+    background-color: rgb(215, 88, 88);
 }
 
 .button {
     background-color: #47d9de;
-    padding: 5px;
+    padding: 10px 50px;
     border-radius: 10px;
+    cursor: pointer;
 }
